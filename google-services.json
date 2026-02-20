@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "357996994523",
+    "firebase_url": "https://sarangdigital-media-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "sarangdigital-media",
+    "storage_bucket": "sarangdigital-media.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:357996994523:android:fa40e9cfc0e53f824811fe",
+        "android_client_info": {
+          "package_name": "com.sarangdigital.derama"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "357996994523-nuunjfmrshbg4n2sqt7m11151lu14lmc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sarangdigital.derama",
+            "certificate_hash": "dfe4f3c783d54a0e72abcd894629da2b03d8aafe"
+          }
+        },
+        {
+          "client_id": "357996994523-26v83donn9f7odti883cnle442jgvlv7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXVaMSdBXnZHjCAX_EPKRemHpRH6_vT8I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "357996994523-26v83donn9f7odti883cnle442jgvlv7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,171 @@
+# Rencana Pengembangan Aplikasi Android Nonton Drama "Derama"
+
+## 1. Pendahuluan
+Aplikasi ini bertujuan untuk menyediakan layanan streaming drama dengan pengalaman pengguna yang mulus, ringan, dan modern. Aplikasi akan memanfaatkan API yang disediakan dan integrasi Firebase untuk analitik.
+
+## 2. Arsitektur & Teknologi (Tech Stack)
+Kami akan menggunakan pendekatan **Modern Android Development (MAD)** untuk memastikan aplikasi performa tinggi, mudah dipelihara, dan skalabel.
+
+*   **Bahasa Pemrograman:** Kotlin (Wajib untuk Android modern).
+*   **UI Toolkit:** **Jetpack Compose**. Ini adalah standar baru UI Android. Lebih ringan, kode lebih sedikit, dan sangat fleksibel dibandingkan XML lama.
+*   **Arsitektur:** **MVVM (Model-View-ViewModel)** dengan prinsip **Clean Architecture**.
+    *   *Data Layer:* Repository, API Service.
+    *   *Domain Layer:* Use Cases (opsional, tapi bagus untuk skalabilitas).
+    *   *UI Layer:* ViewModel, Compose Screens.
+*   **Dependency Injection:** **Hilt**. Standar industri yang didukung Google, memudahkan manajemen dependensi.
+*   **Networking:** **Retrofit** + **OkHttp**. Library paling handal untuk komunikasi API.
+*   **Image Loading:** **Coil**. Dibuat khusus untuk Kotlin dan Compose, sangat ringan dan cepat.
+*   **Video Player:** **Media3 (ExoPlayer)**. Player paling powerful di Android, mendukung streaming HLS/DASH, subtitle, dan kustomisasi kontrol.
+*   **Asynchronous:** **Kotlin Coroutines** & **Flow**. Untuk operasi background yang efisien tanpa memblokir UI.
+*   **Navigasi:** **Jetpack Navigation Compose**.
+*   **Penyimpanan Lokal:** **Room Database** (untuk History & Favorites) dan **DataStore** (untuk pengaturan bahasa/tema).
+*   **Backend/Services:** Firebase (Analytics & Crashlytics) menggunakan `google-services.json` yang tersedia.
+*   **Realtime Database:** Firebase Realtime Database untuk fitur sosial dan konfigurasi dinamis.
+*   **Monetization:** **Google AdMob**. Integrasi iklan untuk monetisasi aplikasi.
+
+## 3. Fitur Utama & Alur Pengguna
+
+### A. Navigasi Utama (Bottom Navigation Bar)
+Aplikasi akan memiliki 4 menu utama di bagian bawah:
+1.  **Home**: Halaman utama dengan banner dan rekomendasi.
+2.  **Browse**: Halaman pencarian dan eksplorasi drama.
+3.  **History**: Daftar riwayat tontonan pengguna.
+4.  **Profile**: Pengaturan bahasa, tema, dan informasi aplikasi.
+
+### B. Home Screen (Beranda)
+*   **Banner Carousel:** Mengambil data dari endpoint `/home` (objek `banner`). Auto-scroll.
+*   **Section Lists:** Daftar horizontal untuk kategori (Trending, New, dll) dari endpoint `/home` (objek `sections`).
+*   **See More Action:** Setiap section memiliki tombol "Lihat Semua" (See More) yang akan menavigasi ke **Section Detail Screen**.
+*   Setiap item menampilkan: Gambar Cover, Judul, dan Label.
+
+### C. Section Detail Screen (Perluasan Section)
+*   Halaman ini muncul ketika user menekan "Lihat Semua" pada salah satu section di Home.
+*   **API:** Menggunakan endpoint `/browse` dengan parameter `typeId` yang didapat dari `ScrapedSection` di Home.
+*   **Tampilan:** Grid layout (2 atau 3 kolom) yang menampilkan daftar drama.
+*   **Pagination:** Mendukung *infinite scroll* (memuat halaman berikutnya otomatis saat di-scroll) menggunakan parameter `page`.
+
+### D. Browse Screen (Pencarian & Jelajah)
+*   **Search Bar:** Input teks untuk mencari drama.
+*   **API:** Menggunakan endpoint `/search` dengan query `q`.
+*   **Hasil Pencarian:** Menampilkan hasil dalam bentuk list atau grid.
+*   **Fitur Tambahan:** Bisa menampilkan *Top Search* atau *Popular Tags* jika data tersedia (opsional).
+
+### E. Detail Drama
+*   **Info:** Judul, Cover, Sinopsis, Genre, Tags, Cast.
+*   **API:** `/drama/:id`.
+*   **Episode List:** Grid atau list episode. Menampilkan durasi dan nomor episode.
+*   **Rekomendasi:** Menampilkan drama sejenis di bagian bawah.
+*   **Action:** Tombol "Favorite" (simpan ke Room DB).
+
+### F. Video Player (Nonton) - TikTok Style
+*   **Player UI:** Fullscreen portrait-first (dengan opsi landscape). Tampilan minimalis mirip TikTok/Reels.
+*   **API:** `/watch` dengan `bookId` (drama ID).
+*   **Navigasi Episode (Swipe):**
+    *   **Vertical Swipe:** Geser layar ke atas untuk lanjut ke episode berikutnya, geser ke bawah untuk episode sebelumnya.
+    *   **Poster Transition:** Saat men-swipe, menampilkan transisi poster episode selanjutnya secara halus sebelum video dimuat, memberikan efek realistis.
+*   **Overlay Controls:**
+    *   **Info:** Menampilkan Judul Drama dan Sinopsis singkat di bagian bawah (di atas progress bar).
+    *   **Episode Button:** Tombol khusus untuk membuka *Bottom Sheet* atau *Overlay* berisi daftar episode dalam tampilan **Grid** (gambar poster per episode).
+    *   **Share Button:** Tombol untuk membagikan link aplikasi/drama ke media sosial.
+    *   **Standard Controls:** Play/Pause (tap tengah), Seek (slider), Quality Selector.
+*   **Fitur:**
+    *   Auto-play next episode.
+    *   Integrasi subtitle otomatis.
+
+### G. History & Profile
+*   **History Tab:** Menampilkan daftar drama yang pernah ditonton beserta progress episode terakhir (disimpan di Room DB).
+*   **Profile Tab:**
+    *   Pengaturan Bahasa (API `/languages`).
+    *   Daftar Favorit (My List).
+    *   Tentang Aplikasi.
+
+### H. Monetisasi (AdMob)
+*   **Banner Ads:** Penempatan di bagian bawah layar Home, Browse, dan Detail Drama (non-intrusive).
+*   **Interstitial Ads:** Ditampilkan saat transisi antar screen tertentu (misal: saat klik episode sebelum masuk player), dengan frekuensi yang wajar agar tidak mengganggu.
+*   **Rewarded Ads (Opsional):** Bisa digunakan untuk membuka konten premium atau resolusi tinggi di masa depan.
+
+### I. Fitur Realtime (Firebase Database)
+*   **Live Comments (Danmaku):** Fitur komentar interaktif yang muncul secara realtime saat menonton (mirip Bilibili/TikTok live). Meningkatkan engagement pengguna.
+*   **Watching Now:** Menampilkan jumlah pengguna yang sedang menonton drama/episode yang sama secara realtime.
+*   **App Config:** Mengontrol konfigurasi aplikasi dari jauh, seperti:
+    *   **Maintenance Mode:** Menampilkan layar maintenance jika server sedang perbaikan.
+    *   **Ad Switch:** Mematikan/menyalakan iklan jika terjadi masalah policy.
+    *   **Update Checker:** Notifikasi jika ada versi aplikasi baru.
+
+## 4. Desain UI/UX (Style)
+*   **Tema:** **Dark Mode** sebagai default.
+*   **Warna Dominan:** Mengambil sampel warna dari `logo.png` atau warna netral (Hitam/Abu gelap) dengan aksen warna cerah.
+*   **Typography:** Font sans-serif modern (misal: Roboto atau Poppins).
+*   **Layout:**
+    *   Menggunakan **Card** dengan rounded corners.
+    *   **Skeleton Loading:** Placeholder animasi saat memuat data.
+    *   **Transitions:** Animasi slide atau fade saat berpindah antar screen.
+
+## 5. Struktur Project (Package)
+```
+com.derama.app
+├── data
+│   ├── api (Retrofit interfaces)
+│   ├── model (Data classes: Drama, Section, Episode, etc)
+│   ├── repository (Data logic: HomeRepository, DramaRepository)
+│   └── local (Room DB, DAO)
+├── di (Dependency Injection modules)
+├── domain (Use cases - optional)
+├── ui
+│   ├── components (Reusable widgets: MovieCard, SectionHeader, BottomNavBar)
+│   ├── theme (Color, Type, Shape)
+│   ├── screens
+│   │   ├── home
+│   │   ├── section_detail (New: See More list)
+│   │   ├── browse (Search)
+│   │   ├── history
+│   │   ├── profile
+│   │   ├── detail
+│   │   └── player
+│   └── navigation (NavGraph, ScreenRoute)
+└── utils (Extensions, Constants)
+```
+
+## 6. Fitur Lanjutan & Saran UX (Update)
+Untuk meningkatkan kualitas aplikasi agar setara dengan aplikasi streaming profesional, disarankan menambahkan fitur berikut:
+
+1.  **Picture-in-Picture (PiP) Mode:**
+    *   Memungkinkan pengguna tetap menonton drama dalam jendela kecil sambil membuka aplikasi lain (fitur wajib Android modern).
+2.  **Edge-to-Edge UI:**
+    *   Membuat aplikasi tampil *immersive* dengan menggambar konten di belakang status bar dan navigation bar (transparan).
+3.  **Smart Search & Recent History:**
+    *   Menyimpan kata kunci pencarian terakhir di database lokal untuk akses cepat.
+4.  **Gestur Player Lanjutan:**
+    *   **Double-tap to Seek:** Ketuk dua kali di kiri/kanan layar untuk mundur/maju 10 detik.
+5.  **Pull-to-Refresh:**
+    *   Menambahkan fitur tarik ke bawah untuk menyegarkan konten di Home dan Section Detail.
+6.  *   **Deep Linking:**
+    *   Memungkinkan pengguna membuka aplikasi langsung ke halaman drama tertentu dari link yang dibagikan.
+
+## 7. Persiapan Rilis Play Store (Wajib)
+Agar aplikasi diterima di Google Play Store, ada beberapa syarat non-teknis dan teknis yang harus dipenuhi:
+
+1.  **Akun Developer:** Mendaftar akun Google Play Console ($25 sekali bayar).
+2.  **Privacy Policy:** Wajib memiliki URL kebijakan privasi (bisa hosting gratis di GitHub Pages/Google Sites) karena aplikasi menggunakan internet dan mungkin mengumpulkan data (Firebase/AdMob).
+3.  **Data Safety Form:** Mengisi formulir keamanan data di konsol, menjelaskan data apa yang diambil (misal: Device ID untuk iklan/analitik).
+4.  **Aset Grafis:**
+    *   **Icon:** 512x512 px (PNG).
+    *   **Feature Graphic:** 1024x500 px (PNG/JPG).
+    *   **Screenshots:** Minimal 2 screenshot untuk HP, Tablet 7", dan Tablet 10".
+5.  **Testing Requirement:** Untuk akun developer perorangan baru (dibuat setelah Nov 2023), wajib melakukan **Closed Testing** dengan minimal **20 tester** selama **14 hari** sebelum bisa rilis production.
+6.  **Content Rating:** Mengisi kuesioner rating konten (karena ada drama, mungkin rating 12+ atau 16+ tergantung konten).
+7.  **App Bundle (.aab):** Upload format `.aab`, bukan `.apk`.
+
+## 8. Langkah Eksekusi (Roadmap)
+1.  **Setup Project:** Init Android Studio project, setup Gradle (libs), copy `google-services.json` dan `logo.png`.
+2.  **AdMob Init:** Inisialisasi AdMob SDK di awal aplikasi.
+3.  **Data Layer:** Buat Data Class, Setup Retrofit Service, dan Room Database.
+3.  **UI Foundation:** Setup Theme, Navigation Host, dan Bottom Navigation Bar.
+4.  **Home & Section Detail:** Implementasi Home dengan carousel dan horizontal list, serta halaman Section Detail (Grid & Pagination).
+5.  **Browse & Search:** Implementasi halaman pencarian.
+6.  **Detail & Player:** Implementasi halaman detail drama dan video player.
+7.  **History & Profile:** Implementasi fitur history lokal dan pengaturan.
+8.  **Polishing:** Tambahkan animasi, error handling, dan testing.
+9.  **Release Prep:** Generate Privacy Policy, siapkan aset grafis, dan build App Bundle (.aab).
+
+Rencana ini siap dieksekusi.
