@@ -147,8 +147,13 @@ Agar aplikasi diterima di Google Play Store, ada beberapa syarat non-teknis dan 
 
 1.  **Akun Developer:** Mendaftar akun Google Play Console ($25 sekali bayar).
 2.  **Privacy Policy:** Wajib memiliki URL kebijakan privasi (bisa hosting gratis di GitHub Pages/Google Sites) karena aplikasi menggunakan internet dan mungkin mengumpulkan data (Firebase/AdMob).
+    *   **Privacy Policy URL:** `https://sarangdigital.github.io/derama-legal/privacy_policy.html`
+    *   **Terms URL:** `https://sarangdigital.github.io/derama-legal/terms_conditions.html`
 3.  **Data Safety Form:** Mengisi formulir keamanan data di konsol, menjelaskan data apa yang diambil (misal: Device ID untuk iklan/analitik).
-4.  **Aset Grafis:**
+4.  **Kontak Developer:**
+    *   **Email:** `sutradarac@gmail.com`
+    *   **Phone:** `+6282223967676`
+5.  **Aset Grafis:**
     *   **Icon:** 512x512 px (PNG).
     *   **Feature Graphic:** 1024x500 px (PNG/JPG).
     *   **Screenshots:** Minimal 2 screenshot untuk HP, Tablet 7", dan Tablet 10".
