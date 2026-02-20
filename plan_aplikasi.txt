@@ -92,6 +92,13 @@ Aplikasi akan memiliki 4 menu utama di bagian bawah:
     *   **Ad Switch:** Mematikan/menyalakan iklan jika terjadi masalah policy.
     *   **Update Checker:** Notifikasi jika ada versi aplikasi baru.
 
+### J. Keamanan & Kepatuhan (Compliance)
+*   **DMCA Disclaimer:** Halaman khusus atau dialog yang menyatakan bahwa aplikasi hanya mengindeks konten publik dan tidak menyimpan video di server sendiri.
+*   **Report Content:** Tombol bagi pengguna untuk melaporkan konten yang rusak atau melanggar hak cipta (Wajib untuk Play Store).
+*   **Ad Block Logic:** Mencegah *redirect* berbahaya dari sumber video pihak ketiga agar pengguna tetap aman di dalam aplikasi.
+*   **In-App Updates:** Integrasi Google Play In-App Update API untuk pembaruan aplikasi yang mulus.
+*   **Push Notifications (FCM):** Notifikasi episode baru atau rekomendasi drama untuk meningkatkan retensi pengguna.
+
 ## 4. Desain UI/UX (Style)
 *   **Tema:** **Dark Mode** sebagai default.
 *   **Warna Dominan:** Mengambil sampel warna dari `logo.png` atau warna netral (Hitam/Abu gelap) dengan aksen warna cerah.
